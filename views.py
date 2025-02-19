@@ -77,6 +77,15 @@ def buscar_historicos_entre_datas(data_inicio: date, data_fim: date):
 x = buscar_historicos_entre_datas(date.today() - timedelta(days=1), date.today() + timedelta(days=1))
 print("HISTÓRICOS",x)
 
+def criar_grafico_por_conta():
+    with Session(engine) as session:
+        statement = select(Conta).where(Conta.status==Status.ATIVO)
+        contas = session.exec(statement).all()
+        bancos = [i.banco.value for i in contas]
+        total = [i.valor for i in contas]
+        import matplotlib.pyplot as plt
+        plt.bar(bancos, total)
+        plt.show()
 # CRIAR CONTA
 # conta = Conta(valor=20, banco=Bancos.SANTANDER)
 # criar_conta(conta)
@@ -85,7 +94,9 @@ print("HISTÓRICOS",x)
 # TRANSFERIR SALDO
 # transferir_saldo(3,1,3)
 # HISTÓRICO
-historico = Historico(conta_id=1, tipos=Tipos.ENTRADA, valor=10, data=date.today())
-movimentar_dinheiro(historico)
+# historico = Historico(conta_id=1, tipos=Tipos.ENTRADA, valor=10, data=date.today())
+# movimentar_dinheiro(historico)
 # TOTAL DAS CONTAS
-print("SALDO DAS CONTAS:", total_contas())
+# print("SALDO DAS CONTAS:", total_contas())
+
+criar_grafico_por_conta()
